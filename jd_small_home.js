@@ -45,7 +45,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message = '';
+let cookiesArr = [], cookie = '', message = '',myCode=[];
 let isPurchaseShops = false;//是否一键加购商品到购物车，默认不加购
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -96,9 +96,9 @@ const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
 async function smallHome() {
   await loginHome();
   await ssjjRooms();
-  await helpFriends();
   if (!$.isUnLock) return;
   await createInviteUser();
+  await helpFriends();
   await queryDraw();
   await lottery();
   await doAllTask();
@@ -156,12 +156,24 @@ async function doChannelsListTask(taskId, taskType) {
   }
 }
 async function helpFriends() {
-  await updateInviteCode();
-  if (!$.updatePkActivityIdRes) await updateInviteCodeCDN();
-  for (let item of $.inviteCodes.inviteCode) {
-    if (!item) continue
-    await createAssistUser(item, $.createAssistUserID || "1318106976846299138");
+  if(myCode.length =0){
+	  await updateInviteCode();
+	  if (!$.updatePkActivityIdRes) await updateInviteCodeCDN();
+	  for (let item of $.inviteCodes.inviteCode) {
+		if (!item) continue
+		await createAssistUser(item, $.createAssistUserID || "1318106976846299138");
+	  }
+  }else{
+	  for (var i=0; i<2; i++){
+	     let x = Math.round(myCode.length);
+		 if(x>myCode.length){
+			x=0;
+		 }
+		 console.log("助力的是修改过的代码,invideCode:"|| myCode[x-1]);
+		 await createAssistUser(myCode[x-1], $.createAssistUserID || "1318106976846299138");
+     }
   }
+  
 }
 async function doAllTask() {
   await queryAllTaskInfo();//获取任务详情列表$.taskList
@@ -415,6 +427,7 @@ function createInviteUser() {
             if (data.head.code === 200) {
               if (data.body) {
                 if (data.body.id) {
+				  myCode.push(shareCode);
                   console.log(`\n您的${$.name}shareCode(每天都是变化的):【${data.body.id}】\n`);
                   $.shareCode = data.body.id;
                 }
