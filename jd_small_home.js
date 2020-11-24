@@ -427,7 +427,8 @@ function createInviteUser() {
             if (data.head.code === 200) {
               if (data.body) {
                 if (data.body.id) {
-				  myCode.push(shareCode);
+		  myCode.push(data.body.id);
+		  console.log('code lenth:'|| myCode.length);
                   console.log(`\n您的${$.name}shareCode(每天都是变化的):【${data.body.id}】\n`);
                   $.shareCode = data.body.id;
                 }
