@@ -169,8 +169,8 @@ async function helpFriends() {
 		 if(x>myCode.length){
 			x=0;
 		 }
-		 console.log("助力的是修改过的代码,invideCode:"|| myCode[x-1]);
-		 await createAssistUser(myCode[x-1], $.createAssistUserID || "1318106976846299138");
+		 console.log("助力的是修改过的代码,invideCode:"|| myCode[x]);
+		 await createAssistUser(myCode[x], $.createAssistUserID || "1318106976846299138");
      }
   }
   
