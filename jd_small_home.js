@@ -169,7 +169,7 @@ async function helpFriends() {
 		 if(x>myCode.length){
 			x=0;
 		 }
-		 console.log("助力的是修改过的代码,invideCode:"|| myCode[x]);
+		 console.log("助力的是修改过的代码,invideCode:${myCode[x]}" );
 		 await createAssistUser(myCode[x], $.createAssistUserID || "1318106976846299138");
      }
   }
@@ -427,7 +427,7 @@ function createInviteUser() {
             if (data.head.code === 200) {
               if (data.body) {
                 if (data.body.id) {
-		  myCode.push(data.body.id);
+		  myCode.push(${data.body.id});
 	          console.log('test.,.......');
 		  console.log('code lenth:' + myCode.length);
                   console.log(`\n您的${$.name}shareCode(每天都是变化的):【${data.body.id}】\n`);
