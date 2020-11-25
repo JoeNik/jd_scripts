@@ -43,9 +43,9 @@ const $ = new Env('东东小窝');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-
+var myCode=[];
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message = '',myCode=[];
+let cookiesArr = [], cookie = '', message = '';
 let isPurchaseShops = false;//是否一键加购商品到购物车，默认不加购
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -83,6 +83,7 @@ const JD_API_HOST = 'https://lkyl.dianpusoft.cn/api';
         }
         continue
       }
+	  console.log('code lenth:' + myCode.length);
       await smallHome();
     }
   }
@@ -156,7 +157,8 @@ async function doChannelsListTask(taskId, taskType) {
   }
 }
 async function helpFriends() {
-  if(myCode.length =0){
+	console.log(myCode);
+  if(myCode.length ===0){
 	  await updateInviteCode();
 	  if (!$.updatePkActivityIdRes) await updateInviteCodeCDN();
 	  for (let item of $.inviteCodes.inviteCode) {
@@ -169,7 +171,8 @@ async function helpFriends() {
 		 if(x>myCode.length){
 			x=0;
 		 }
-		 console.log("助力的是修改过的代码,invideCode:${myCode[x]}" );
+		 console.log("助力的是修改过的代码" );
+		 console.log(myCode);
 		 await createAssistUser(myCode[x], $.createAssistUserID || "1318106976846299138");
      }
   }
@@ -427,9 +430,9 @@ function createInviteUser() {
             if (data.head.code === 200) {
               if (data.body) {
                 if (data.body.id) {
-		  myCode.push(${data.body.id});
-	          console.log('test.,.......');
-		  console.log('code lenth:' + myCode.length);
+		          myCode.push(data.body.id);
+		          console.log('code lenth:' + myCode.length);
+				  console.log(myCode);
                   console.log(`\n您的${$.name}shareCode(每天都是变化的):【${data.body.id}】\n`);
                   $.shareCode = data.body.id;
                 }
