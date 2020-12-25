@@ -1,19 +1,25 @@
 /*
 crazy joy
 挂机领金币/宝箱专用
+
+
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #crazyJoy挂机
 10 7 * * * https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_crazy_joy_coin.js, tag=crazyJoy挂机, enabled=true
+
 ================Loon==============
 [Script]
 cron "10 7 * * *" script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_crazy_joy_coin.js,tag=crazyJoy挂机
+
 ===============Surge=================
 crazyJoy挂机 = type=cron,cronexp="10 * * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_crazy_joy_coin.js
+
 ============小火箭=========
 crazyJoy挂机 = type=cron,script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_crazy_joy_coin.js, cronexpr="10 * * * *", timeout=200, enable=true
+
  */
 
 
@@ -36,6 +42,7 @@ if ($.isNode()) {
   cookiesArr.reverse();
   cookiesArr.push(...[$.getdata('CookieJD2'), $.getdata('CookieJD')]);
   cookiesArr.reverse();
+  cookiesArr = cookiesArr.filter(item => item !== "" && item !== null && item !== undefined);
 }
 !function (n) {
   "use strict";
@@ -172,13 +179,7 @@ if ($.isNode()) {
         await TotalBean();
         console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
         if (!$.isLogin) {
-          $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
-
-          if ($.isNode()) {
-            await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-          } else {
-            $.setdata('', `CookieJD${i ? i + 1 : ""}`);//cookie失效，故清空cookie。$.setdata('', `CookieJD${i ? i + 1 : "" }`);//cookie失效，故清空cookie。
-          }
+         $.log(`\n京东账号${$.index} ${$.nickName || $.UserName}\ncookie已过期,请重新登录获取\n`)
           continue
         }
         await jdJxStory()
@@ -411,12 +412,17 @@ function getCoin() {
             if (data.data && data.data.tryMoneyJoyBeans) {
               console.log(`分红狗生效中，预计获得 ${data.data.tryMoneyJoyBeans} 京豆奖励`)
             }
-            if (data.data && data.data.totalCoinAmount)
-              $.coin = data.data.totalCoinAmount
+            if (data.data && data.data.totalCoinAmount) {
+              $.coin = data.data.totalCoinAmount;
+            } else {
+              $.coin = `获取当前金币数量失败`
+            }
             if (data.data && data.data.luckyBoxRecordId) {
-              await openBox(data.data.luckyBoxRecordId)
-            } else
-              $.log(`产出金币信息获取失败`)
+              await openBox('LUCKY_BOX_DROP',data.data.luckyBoxRecordId)
+            }
+            if (data.data) {
+              $.log(`此次在线收益：获得 ${data.data['coins']} 金币`)
+            }
           }
         }
       } catch (e) {
@@ -429,7 +435,6 @@ function getCoin() {
 }
 
 function openBox(eventType = 'LUCKY_BOX_DROP', boxId) {
-  console.log(`openBox:${eventType}`)
   let body = { eventType, "eventRecordId": boxId}
   return new Promise(async resolve => {
     $.get(taskUrl('crazyJoy_event_getVideoAdvert', JSON.stringify(body)), async (err, resp, data) => {
