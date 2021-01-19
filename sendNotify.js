@@ -1,13 +1,8 @@
 /*
  * @Author: LXK9301 https://github.com/LXK9301
  * @Date: 2020-08-19 16:12:40 
-<<<<<<< HEAD
- * @Last Modified by: lxk0301
- * @Last Modified time: 2020-12-21 13:52:54
-=======
  * @Last Modified by: LXK9301
  * @Last Modified time: 2021-1-7 17:52:54
->>>>>>> lxk/master
  */
 const querystring = require("querystring");
 const $ = new Env();
@@ -52,14 +47,11 @@ let DD_BOT_SECRET = '';
 let QYWX_KEY = '';
 
 // =======================================企业微信应用消息通知设置区域===========================================
-<<<<<<< HEAD
 //此处填你企业微信应用消息的 值(详见文档 https://work.weixin.qq.com/api/doc/90000/90135/90236)，依次填上corpid的值,corpsecret的值,touser的值,agentid的值，素材库图片id（见https://work.weixin.qq.com/api/doc/90000/90135/90253） 注意用,号隔开，例如：wwcff56746d9adwers,B-791548lnzXBE6_BWfxdf3kSTMJr9vFEPKAbh6WERQ,mingcheng,1000001,2COXgjH2UIfERF2zxrtUOKgQ9XklUqMdGSWLBoW_lSDAdafat
 //注：此处设置github action用户填写到Settings-Secrets里面(Name输入QYWX_AM)
-=======
 //此处填你企业微信应用消息的 值(详见文档 https://work.weixin.qq.com/api/doc/90000/90135/90236)，依次填上corpid的值,corpsecret的值,touser的值,agentid的值，素材库图片id（见https://github.com/LXK9301/jd_scripts/issues/519) 注意用,号隔开，例如：wwcff56746d9adwers,B-791548lnzXBE6_BWfxdf3kSTMJr9vFEPKAbh6WERQ,mingcheng,1000001,2COXgjH2UIfERF2zxrtUOKgQ9XklUqMdGSWLBoW_lSDAdafat
 //增加一个选择推送消息类型，用图文消息直接填写素材库图片id的值，用卡片消息就填写0(就是数字零)
 //(环境变量名 QYWX_AM)
->>>>>>> lxk/master
 let QYWX_AM = '';
 
 // =======================================iGot聚合推送通知设置区域===========================================
